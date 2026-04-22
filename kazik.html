@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Logika</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        color: white;
+        background: repeating-linear-gradient(
+            45deg,
+            #1e1e1e,
+            #1e1e1e 20px,
+            #2c2c2c 20px,
+            #2c2c2c 40px
+        );
+    }
+
+    h1 {
+        margin-top: 40px;
+    }
+
+    .box {
+        margin-top: 50px;
+        font-size: 50px;
+    }
+
+    .num {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        margin: 10px;
+        background: #444;
+        border-radius: 10px;
+    }
+
+    button {
+        margin-top: 30px;
+        padding: 15px 30px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .coins {
+        margin-top: 20px;
+        font-size: 24px;
+    }
+</style>
+</head>
+<body>
+
+<h1>🎰 Logika slots</h1>
+
+<div class="box">
+    <div id="n1" class="num">?</div>
+    <div id="n2" class="num">?</div>
+    <div id="n3" class="num">?</div>
+</div>
+
+<button onclick="spin()">Крутити</button>
+
+<div class="coins">логіки: <span id="coins">0</span></div>
+
+<script>
+let coins = 0;
+let spinning = false;
+
+function rand() {
+    return Math.floor(Math.random() * 9) + 1;
+}
+
+function spinNumber(id, delay, callback) {
+    let count = 0;
+
+    let interval = setInterval(() => {
+        document.getElementById(id).innerText = rand();
+        count++;
+
+        if (count > delay) {
+            clearInterval(interval);
+            let finalValue = rand();
+            document.getElementById(id).innerText = finalValue;
+            callback(finalValue);
+        }
+    }, 80);
+}
+
+function spin() {
+    if (spinning) return;
+    spinning = true;
+
+    let result = [];
+
+    spinNumber("n1", 10, (a) => {
+        result[0] = a;
+
+        spinNumber("n2", 15, (b) => {
+            result[1] = b;
+
+            spinNumber("n3", 20, (c) => {
+                result[2] = c;
+
+                if (a === b && b === c) {
+                    coins += 5;
+                    alert("🎉 Джекпот! +5 монет");
+                }
+
+                document.getElementById("coins").innerText = coins;
+                spinning = false;
+            });
+        });
+    });
+}
+</script>
+
+</body>
+</html>
